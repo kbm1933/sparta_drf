@@ -5,6 +5,7 @@ from rest_framework import status
 from articles.serializers import ArticleSerializer
 from articles.models import Article
 from django.shortcuts import get_object_or_404
+from drf_yasg.utils import swagger_auto_schema
 # Create your views here.
 
 class ArticleList(APIView):
@@ -13,6 +14,7 @@ class ArticleList(APIView):
         serializer = ArticleSerializer(articles,many = True)
         return Response(serializer.data)
     
+    @swagger_auto_schema(request_body=ArticleSerializer)
     def post(self, request,format=None):
         serializer = ArticleSerializer(data = request.data)
         if serializer.is_valid():
@@ -35,6 +37,7 @@ class Article_detail_view(APIView):
         serializer = ArticleSerializer(article)
         return Response(serializer.data)
     
+    @swagger_auto_schema(request_body=ArticleSerializer)
     def put(self,request,article_id,format=None):
         article = get_object_or_404(Article,id=article_id)
         serializer = ArticleSerializer(article,data = request.data) #article의 데이터를 새로 바꿔준다.
